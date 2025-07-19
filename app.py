@@ -14,11 +14,15 @@ with open('sentiment_model.pkl', 'rb') as f:
 with open('tfidf_vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
 
-# Function to clean text
+# Function to clean text with negation handling
 def clean_text(text):
     text = text.lower()
     text = re.sub(r'<.*?>', '', text)  # remove HTML tags
     text = re.sub(r'[^a-z\s]', '', text)  # keep only letters and spaces
+
+    # Handle negations: join 'not' with the next word
+    text = re.sub(r'\bnot\s+(\w+)', r'not_\1', text)
+
     tokens = text.split()
     stop_words = set(stopwords.words('english'))
     tokens = [word for word in tokens if word not in stop_words]
