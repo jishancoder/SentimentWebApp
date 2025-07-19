@@ -14,11 +14,32 @@ with open('sentiment_model.pkl', 'rb') as f:
 with open('tfidf_vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
 
-# Function to clean text with negation handling
+# Function to clean text with contraction & negation handling
 def clean_text(text):
     text = text.lower()
     text = re.sub(r'<.*?>', '', text)  # remove HTML tags
     text = re.sub(r'[^a-z\s]', '', text)  # keep only letters and spaces
+
+    # Expand common contractions
+    contractions = {
+        "isn't": "is not",
+        "aren't": "are not",
+        "wasn't": "was not",
+        "weren't": "were not",
+        "don't": "do not",
+        "doesn't": "does not",
+        "didn't": "did not",
+        "can't": "cannot",
+        "couldn't": "could not",
+        "won't": "will not",
+        "wouldn't": "would not",
+        "shouldn't": "should not",
+        "mustn't": "must not",
+        "mightn't": "might not",
+    }
+
+    for contraction, expanded in contractions.items():
+        text = text.replace(contraction, expanded)
 
     # Handle negations: join 'not' with the next word
     text = re.sub(r'\bnot\s+(\w+)', r'not_\1', text)
