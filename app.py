@@ -42,6 +42,3 @@ if st.button("Analyze Sentiment"):
             st.success("✅ Positive Sentiment! 😊")
         else:
             st.error("❌ Negative Sentiment. 😞")
-
-
-Updated app.py with NLTK stopwords fix
